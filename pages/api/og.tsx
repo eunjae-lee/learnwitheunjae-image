@@ -5,6 +5,7 @@
 
 import { ImageResponse } from "@vercel/og";
 import { NextRequest } from "next/server";
+import RootPage from "../../src/components/RootPage";
 
 export const config = {
   runtime: "experimental-edge",
@@ -36,56 +37,55 @@ export const config = {
 
 export default async function og(req: NextRequest) {
   const params = new URLSearchParams(req.url.split("?")[1]);
-  const title = params.get("title");
+  const type = params.get("type");
+  const payload = params.get("payload");
 
-  return new ImageResponse(
-    (
-      <div tw="h-full w-full flex flex-col justify-center items-center bg-gray-50 p-20">
-        <p tw="text-7xl font-thin">{title || "Hello world!"}</p>
-        <p tw="text-7xl font-black">테스트</p>
-      </div>
-    ),
-    {
-      width: 1200,
-      height: 600,
-      // fonts: [
-      //   // {
-      //   //   name: "Noto Sans KR",
-      //   //   data: fontDataBlack,
-      //   //   style: "normal",
-      //   //   weight: 900,
-      //   // },
-      //   // {
-      //   //   name: "Noto Sans KR",
-      //   //   data: fontDataBold,
-      //   //   style: "normal",
-      //   //   weight: 700,
-      //   // },
-      //   // {
-      //   //   name: "Noto Sans KR",
-      //   //   data: fontDataMedium,
-      //   //   style: "normal",
-      //   //   weight: 500,
-      //   // },
-      //   // {
-      //   //   name: "Noto Sans KR",
-      //   //   data: fontDataRegular,
-      //   //   style: "normal",
-      //   //   weight: 400,
-      //   // },
-      //   // {
-      //   //   name: "Noto Sans KR",
-      //   //   data: fontDataLight,
-      //   //   style: "normal",
-      //   //   weight: 300,
-      //   // },
-      //   {
-      //     name: "Noto Sans KR",
-      //     data: fontDataThin,
-      //     style: "normal",
-      //     weight: 100,
-      //   },
-      // ],
-    }
-  );
+  const options = {
+    width: 1200,
+    height: 600,
+    // fonts: [
+    //   // {
+    //   //   name: "Noto Sans KR",
+    //   //   data: fontDataBlack,
+    //   //   style: "normal",
+    //   //   weight: 900,
+    //   // },
+    //   // {
+    //   //   name: "Noto Sans KR",
+    //   //   data: fontDataBold,
+    //   //   style: "normal",
+    //   //   weight: 700,
+    //   // },
+    //   // {
+    //   //   name: "Noto Sans KR",
+    //   //   data: fontDataMedium,
+    //   //   style: "normal",
+    //   //   weight: 500,
+    //   // },
+    //   // {
+    //   //   name: "Noto Sans KR",
+    //   //   data: fontDataRegular,
+    //   //   style: "normal",
+    //   //   weight: 400,
+    //   // },
+    //   // {
+    //   //   name: "Noto Sans KR",
+    //   //   data: fontDataLight,
+    //   //   style: "normal",
+    //   //   weight: 300,
+    //   // },
+    //   {
+    //     name: "Noto Sans KR",
+    //     data: fontDataThin,
+    //     style: "normal",
+    //     weight: 100,
+    //   },
+    // ],
+  };
+
+  if (type === "root") {
+    return new ImageResponse(<RootPage />, options);
+  } else {
+    return null;
+  }
 }

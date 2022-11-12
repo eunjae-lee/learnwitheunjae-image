@@ -1,10 +1,14 @@
 import { ImageResponse } from "@vercel/og";
+import { NextRequest } from "next/server";
 
 export const config = {
   runtime: "experimental-edge",
 };
 
-export default function og() {
+export default function og(req: NextRequest) {
+  const params = new URLSearchParams(req.url.split("?")[1]);
+  const title = params.get("title");
+
   return new ImageResponse(
     (
       <div
@@ -19,7 +23,7 @@ export default function og() {
           justifyContent: "center",
         }}
       >
-        Hello world!
+        {title || "Hello world!"}
       </div>
     ),
     {

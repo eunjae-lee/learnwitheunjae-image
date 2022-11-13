@@ -5,7 +5,10 @@
 
 import { ImageResponse } from "@vercel/og";
 import { NextRequest } from "next/server";
+import { ReactElement } from "react";
 import RootPage from "../../src/components/RootPage";
+import TitleAndDesc from "../../src/components/TitleAndDesc";
+import TitleOnly from "../../src/components/TitleOnly";
 
 export const config = {
   runtime: "experimental-edge",
@@ -38,7 +41,8 @@ export const config = {
 export default async function og(req: NextRequest) {
   const params = new URLSearchParams(req.url.split("?")[1]);
   const type = params.get("type");
-  const payload = params.get("payload");
+  const title = params.get("title");
+  const description = params.get("description");
 
   const options = {
     width: 1200,
@@ -83,9 +87,15 @@ export default async function og(req: NextRequest) {
     // ],
   };
 
+  let ret: ReactElement = <div />;
+
   if (type === "root") {
-    return new ImageResponse(<RootPage />, options);
-  } else {
-    return null;
+    ret = <RootPage />;
+  } else if (title && description) {
+    ret = <TitleAndDesc title={title} description={description} />;
+  } else if (title && !description) {
+    ret = <TitleOnly title={title} />;
   }
+
+  return new ImageResponse(ret, options);
 }
